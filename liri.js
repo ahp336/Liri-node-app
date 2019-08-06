@@ -76,4 +76,6 @@ else if(commands === "movie"){
         }
     this.findMovie(search);
     console.log('\n-------------------\n');
+}else if(commands === ""){
+    
 }
