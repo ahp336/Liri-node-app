@@ -23,14 +23,13 @@ var spacer = "\n-----------------\n"
 if(commands === "concert"){
     console.log("\n---------------\n")
     console.log("Infomation about the events:");
-    console.log()
+    
     this.findBand = function(artist){
         var URL = "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp";
         
         axios.get(URL).then(function(response){
             var jsonData = response.data
-            var eventDate = jsonData[0].datetime;
-            
+
             var result= [
                 "Venue: " + jsonData[0].venue.name,
                 "Venue Location: " + jsonData[0].venue.city + ", " + jsonData[0].venue.region + " " + jsonData[0].venue.country ,
@@ -46,4 +45,35 @@ if(commands === "concert"){
 
     }   
     this.findBand(search);
-};
+    console.log('\n-------------------\n');
+
+}
+else if(commands === "movie"){
+    console.log("\n---------------\n")
+    console.log("Infomation about movie:");
+        this.findMovie = function(movies){
+            var URL = "http://www.omdbapi.com/?t=" + movies +"&apikey=trilogy"
+
+            axios.get(URL).then(function(response){
+
+                var result = [
+                    "Title of the movie: " + response.data.Title,
+                    "Year the movie: " + response.data.Released,
+                    "Rating of the movie: " + response.data.imdbRating,
+                    "Rotten Tomatoes Rating: " + response.data.Ratings[1].Value, 
+                    "Movies Production: " + response.data.Production,
+                    "Movie Language: " + response.data.Language,
+                    "Plot: " +  response.data.Plot,
+                    "Actors in the movie: " + response.data.Actors
+            
+                ].join('\n\n');
+
+                fs.appendFile('log.txt', result, function(err,data){
+                    if(err) throw err;
+                    console.log(result);
+                })
+            })
+        }
+    this.findMovie(search);
+    console.log('\n-------------------\n');
+}
