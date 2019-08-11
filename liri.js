@@ -6,20 +6,21 @@ var fs = require("fs");
 var axios = require("axios");
 var moment = require('moment');
 
+
 // Naming of all the variables
 var commands = process.argv[2];
-var search = process.argv.slice(3).join(" ");
+var term = process.argv.slice(3).join(" ");
 
 // Default Commands if there is no input
-if(!commands){
+if (!commands) {
     commands = "spotifythis"
-    search = "I Want it That Way"
-    
+    term = "I want it that way"
+
     console.log("\n------------------\n");
 
-    spotify.search({ type: 'track', query: search }, function (err, data) {
+    spotify.search({ type: 'track', query: term }, function (err, data) {
         if (err) {
-            throw err ; 
+            throw err;
         }
         var jsonData = data.tracks.items;
         var result = [
@@ -29,8 +30,8 @@ if(!commands){
             "Preview Link of Song from Spotify: " + jsonData[0].album.external_urls.spotify
         ].join('\n\n');
 
-        fs.appendFile('log.txt', result, function(err,data){
-            if(err) throw err;
+        fs.appendFile('log.txt', result, function (err, data) {
+            if (err) throw err;
             console.log(result);
             console.log('\n-------------------\n');
         })
@@ -39,72 +40,77 @@ if(!commands){
 }
 
 // Functions for all the commands.
-else if(commands === "concert"){
+
+// fuction logic for concert
+else if (commands === "concert") {
     console.log("\n---------------\n")
     console.log("Infomation about the events:");
-    
-    this.findBand = function(artist){
+
+    this.findBand = function (artist) {
         var URL = "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp";
-        
-        axios.get(URL).then(function(response){
+
+        axios.get(URL).then(function (response) {
             var jsonData = response.data
 
-            var result= [
+            var result = [
                 "Venue: " + jsonData[0].venue.name,
-                "Venue Location: " + jsonData[0].venue.city + ", " + jsonData[0].venue.region + " " + jsonData[0].venue.country ,
+                "Venue Location: " + jsonData[0].venue.city + ", " + jsonData[0].venue.region + " " + jsonData[0].venue.country,
                 "Date/Time of the Event: " + moment(jsonData[0].datetime).format("MM/DD/YYYY"),
             ].join('\n\n');
 
 
-            fs.appendFile('log.txt', result, function(err,data){
-                if(err) throw err;
+            fs.appendFile('log.txt', result, function (err, data) {
+                if (err) throw err;
                 console.log(result);
                 console.log('\n-------------------\n')
             })
         });
 
-    }   
-    this.findBand(search);
+    }
+    this.findBand(term);
     console.log('\n-------------------\n');
-
 }
-else if(commands === "movie"){
+
+// function for movie
+else if (commands === "movie") {
     console.log("\n---------------\n")
     console.log("Infomation about movie:");
-        this.findMovie = function(movies){
-            var URL = "http://www.omdbapi.com/?t=" + movies +"&apikey=trilogy"
+    this.findMovie = function (movies) {
+        var URL = "http://www.omdbapi.com/?t=" + movies + "&apikey=trilogy"
 
-            axios.get(URL).then(function(response){
+        axios.get(URL).then(function (response) {
 
-                var jsonData = response.data
-                var result = [
-                    "Title of the movie: " +jsonData .Title,
-                    "Year the movie: " + jsonData.Released,
-                    "Rating of the movie: " + jsonData.imdbRating,
-                    "Rotten Tomatoes Rating: " + jsonData.Ratings[1].Value, 
-                    "Movies Production: " + jsonData.Production,
-                    "Movie Language: " + jsonData.Language,
-                    "Plot: " +  jsonData.Plot,
-                    "Actors in the movie: " + jsonData.Actors
-            
-                ].join('\n\n');
+            var jsonData = response.data
+            var result = [
+                "Title of the movie: " + jsonData.Title,
+                "Year the movie: " + jsonData.Released,
+                "Rating of the movie: " + jsonData.imdbRating,
+                "Rotten Tomatoes Rating: " + jsonData.Ratings[1].Value,
+                "Movies Production: " + jsonData.Production,
+                "Movie Language: " + jsonData.Language,
+                "Plot: " + jsonData.Plot,
+                "Actors in the movie: " + jsonData.Actors
 
-                fs.appendFile('log.txt', result, function(err,data){
-                    if(err) throw err;
-                    console.log(result);
-                    console.log('\n-------------------\n');
-                })
+            ].join('\n\n');
+
+            fs.appendFile('log.txt', result, function (err, data) {
+                if (err) throw err;
+                console.log(result);
+                console.log('\n-------------------\n');
             })
-        }
-    this.findMovie(search);
+        })
+    }
+    this.findMovie(term);
     console.log('\n-------------------\n');
 }
-else if(commands === "spotifythis"){
+// function for spotifythis
+else if (commands === "spotifythis") {
 
-    console.log('\n-------------------\n')
-    spotify.search({ type: 'track', query: search }, function (err, data) {
+    console.log("Infomation about song:");
+
+    spotify.search({ type: 'track', query: term }, function (err, data) {
         if (err) {
-            throw err ; 
+            throw err;
         }
         var jsonData = data.tracks.items;
         var result = [
@@ -114,10 +120,11 @@ else if(commands === "spotifythis"){
             "Preview Link of Song from Spotify: " + jsonData[0].album.external_urls.spotify
         ].join('\n\n');
 
-        fs.appendFile('log.txt', result, function(err,data){
-            if(err) throw err;
+        fs.appendFile('log.txt', result, function (err, data) {
+            if (err) throw err;
             console.log(result);
             console.log('\n-------------------\n');
         })
 
-})};
+    })
+};
