@@ -107,6 +107,7 @@ else if (commands === "movie") {
 else if (commands === "spotifythis") {
 
     console.log("Infomation about song:");
+    console.log('\n-------------------\n');
 
     spotify.search({ type: 'track', query: term }, function (err, data) {
         if (err) {
